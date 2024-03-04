@@ -1,5 +1,6 @@
 namespace SpriteKind {
     export const keys = SpriteKind.create()
+    export const tile = SpriteKind.create()
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     pressed_correct_key(2)
@@ -37,24 +38,7 @@ let list = [
 2,
 3
 ]
-let tiles2 = [img`
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    `]
+let tiles2 = sprites.allOfKind(SpriteKind.tile)
 for (let index = 0; index <= 3; index++) {
     if (list[index] == 0) {
         right_arrow = sprites.create(img`

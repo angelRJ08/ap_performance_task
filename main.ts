@@ -6,11 +6,18 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     pressed_correct_key(2)
 })
 scene.onOverlapTile(SpriteKind.keys, assets.tile`myTile1`, function (sprite, location) {
-    info.changeScoreBy(-1)
-    sprites.destroy(sprite)
+    DeleteLatestTile = tiles2.removeAt(tiles2.indexOf(sprite))
+    if (!(sprites.readDataBoolean(sprite, "Pressed"))) {
+        sprites.destroy(sprite)
+        info.setScore(info.score() - 1)
+    }
+    info.changeLifeBy(-1)
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     pressed_correct_key(1)
+})
+sprites.onDestroyed(SpriteKind.tile, function (sprite) {
+	
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     pressed_correct_key(0)
@@ -19,15 +26,23 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     pressed_correct_key(3)
 })
 function pressed_correct_key (direction: number) {
-    if (tiles2.length > 0 && info.score() != 0) {
+    if (info.score() != 0) {
         latestTile = tiles2[0]
+        if (sprites.readDataNumber(latestTile, "direction") == direction) {
+            sprites.setDataBoolean(latestTile, "Pressed", true)
+            sprites.destroy(latestTile, effects.fire, 100)
+            DeleteLatestTile = tiles2.removeAt(0)
+            info.changeScoreBy(1)
+        }
     }
 }
 let direction_for_tile = 0
 let tile: Sprite = null
 let latestTile: Sprite = null
+let DeleteLatestTile: Sprite = null
 let tiles2: Sprite[] = []
 tiles.setCurrentTilemap(tilemap`level1`)
+info.setLife(3)
 info.setScore(3)
 let list = [
 0,
@@ -123,6 +138,7 @@ forever(function () {
         sprites.setDataNumber(tile, "direction", direction_for_tile)
         tile.setPosition(randint(50, 100), 0)
         tile.setVelocity(0, 50)
+        sprites.setDataBoolean(tile, "Pressed", false)
         tiles2.push(tile)
     }
 })
